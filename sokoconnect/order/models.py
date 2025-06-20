@@ -12,7 +12,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
-        return f"Order {self.order_id}"
+        return f"Order {self.status}"
     
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
@@ -34,7 +34,7 @@ class Payment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Payment {self.payment_id}"
+        return f"Payment {self.payment_status}"
 
 class Cart(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='carts')
@@ -46,4 +46,4 @@ class Cart(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Cart {self.cart_id} for {self.customer.full_name}"
+        return f"Cart {self.products} for {self.customer.full_name}"
