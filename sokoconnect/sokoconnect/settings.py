@@ -90,7 +90,6 @@ DATABASES = {
             'NAME':'test_sokoconnect'
         }
     }
-
 }
 
 
