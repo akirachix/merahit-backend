@@ -4,9 +4,11 @@ from .views import MamaMbogaViewSet, CustomerViewSet
 
 
 
+
 router= DefaultRouter()
 router.register(r"Mamamboga",MamaMbogaViewSet,basename="mamamboga")
 router.register(r"Customer",CustomerViewSet,basename="customer")
+
 
 urlpatterns = [
     path("",include(router.urls))
