@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from users.models import MamaMboga
-
 from users.models import Customer
 
 
