@@ -4,10 +4,6 @@ from rest_framework import viewsets
 from users.models import MamaMboga, Customer
 from order.models import Order,OrderItem,Payment,Cart
 from .serializers import MamaMbogaSerializer, CustomerSerializer,OrderSerializer,OrderItemSerializer,PaymentSerializer,CartSerializer
-# from users.models import Customer
-# from .serializers import CustomerSerializer
-
-
 
 class MamaMbogaViewSet(viewsets.ModelViewSet):
     queryset=MamaMboga.objects.all()
