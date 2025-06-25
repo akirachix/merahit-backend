@@ -7,8 +7,6 @@ class MamaMbogaSerializer(serializers.ModelSerializer):
     class Meta:
         model=MamaMboga
         fields="__all__"
-
-
         
 
 class CustomerSerializer(serializers.ModelSerializer):

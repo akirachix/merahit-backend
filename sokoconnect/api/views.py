@@ -2,8 +2,7 @@ from django.shortcuts import render
 
 from rest_framework import viewsets
 from users.models import MamaMboga, Customer
-from order.models import Order,OrderItem,Payment,Cart
-from .serializers import MamaMbogaSerializer, CustomerSerializer,OrderSerializer,OrderItemSerializer,PaymentSerializer,CartSerializer
+from .serializers import MamaMbogaSerializer, CustomerSerializer
 
 
 class MamaMbogaViewSet(viewsets.ModelViewSet):
