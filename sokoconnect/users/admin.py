@@ -5,4 +5,4 @@ admin.site.register(Customer)
 
 from .models import MamaMboga
 admin.site.register(MamaMboga)
-# Register your models here.
+
