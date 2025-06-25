@@ -87,7 +87,6 @@ DATABASES = {
         'USER':'postgres.vhiiixndtxeyaqzekmks',
         'PASSWORD' : '1321Nm!!!'
     }
-
 }
 
 
