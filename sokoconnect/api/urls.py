@@ -1,12 +1,9 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import MamaMbogaViewSet, CustomerViewSet, OrderViewSet, OrderItemViewSet,PaymentViewSet,CartViewSet
+from .views import  OrderViewSet, OrderItemViewSet,PaymentViewSet,CartViewSet
 # from .views import CustomerViewSet
 
-
 router= DefaultRouter()
-router.register(r"Mamamboga",MamaMbogaViewSet,basename="mamamboga")
-router.register(r"Customer",CustomerViewSet,basename="customer")
 router.register(r"Order",OrderViewSet,basename="order")
 router.register(r"OrderItem",OrderItemViewSet,basename="orderitem")
 router.register(r"Payment",PaymentViewSet,basename="payment")

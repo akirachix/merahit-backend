@@ -164,13 +164,13 @@ class PaymentModelTest(TestCase):
         payment = Payment.objects.create(
             order=self.order,
             amount=Decimal('50.00'),
-            payment_status='paid'
+            payment_status='PAID'
         )
         self.assertEqual(payment.order, self.order)
         self.assertEqual(payment.amount, Decimal('50.00'))
-        self.assertEqual(payment.payment_status, 'Paid')
+        self.assertEqual(payment.payment_status, 'PAID')
         self.assertTrue(isinstance(payment.payment_date, timezone.datetime))
-        self.assertEqual(str(payment), 'Payment COMPLETED')
+        self.assertEqual(str(payment), 'Payment PAID')
 
 class CartModelTest(TestCase):
     def setUp(self):

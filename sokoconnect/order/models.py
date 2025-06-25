@@ -14,7 +14,6 @@ class Order(models.Model):
     
     def __str__(self):
         return f"Order {self.status}"
-    
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_items')
@@ -26,7 +25,6 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"Item {self.product.product_name} in Order {self.order.id}"  
-
 class Payment(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='payments')
     amount = models.DecimalField(max_digits=10, decimal_places=2)

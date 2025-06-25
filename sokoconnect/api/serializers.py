@@ -1,18 +1,5 @@
 from rest_framework import serializers
-from users.models import MamaMboga
-from users.models import Customer
 from order.models import Order,Payment,Cart,OrderItem
-
-
-class MamaMbogaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=MamaMboga
-        fields="__all__"
-
-class CustomerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Customer
-        fields="__all__"
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,7 +9,7 @@ class OrderSerializer(serializers.ModelSerializer):
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model=OrderItem
-        feilds="__all__"
+        fields="__all__"
 
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,4 +18,5 @@ class PaymentSerializer(serializers.ModelSerializer):
 
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
+        model=Cart
         fields="__all__"
