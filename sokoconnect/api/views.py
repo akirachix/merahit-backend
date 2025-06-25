@@ -3,8 +3,6 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from users.models import MamaMboga, Customer
 from .serializers import MamaMbogaSerializer, CustomerSerializer
-# from users.models import Customer
-# from .serializers import CustomerSerializer
 
 
 
