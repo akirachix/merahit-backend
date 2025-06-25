@@ -1,5 +1,4 @@
 from django.shortcuts import render
-
 from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from order.models import Order,OrderItem,Payment,Cart
@@ -23,6 +22,10 @@ class CartViewSet(viewsets.ModelViewSet):
     queryset=Cart.objects.all()
     serializer_class=CartSerializer
 
+
+from reviews.models import Review
+from .serializers import ReviewSerializer
+
 class UsersViewSet(viewsets.ModelViewSet):
     queryset = Users.objects.all()
     serializer_class = UsersSerializer
@@ -45,3 +48,7 @@ class DiscountViewSet(viewsets.ModelViewSet):
     queryset=Discount.objects.all()
     serializer_class=DiscountSerializer
     
+
+class viewSet(viewsets.ModelViewSet):
+   queryset= Review.objects.all()
+   serializer_class= ReviewSerializer
