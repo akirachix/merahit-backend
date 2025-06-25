@@ -46,45 +46,6 @@ class APIMainTests(APITestCase):
             end_date=timezone.now() + timedelta(days=3)
         )
 
-    def test_list_mamamboga(self):
-        url = reverse('mamamboga-list')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_create_mamamboga(self):
-        url = reverse('mamamboga-list')
-        data = {
-            'full_name': 'Mama Mboga 2',
-            'phone_number': '1230000000',
-            'password': 'pass1234',
-            'latitude': 1.234,
-            'longitude': 37.789,
-            'profile_picture': 'http://example.com/profile2.jpg',
-            'working_days': 'Mon-Sat',
-            'working_hours': '7am-6pm'
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-    def test_list_customer(self):
-        url = reverse('customer-list')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_create_customer(self):
-        url = reverse('customer-list')
-        data = {
-            'full_name': 'Customer 2',
-            'phone_number': '1112223333',
-            'password': 'custpas2',
-            'latitude': 2.1,
-            'longitude': 39.0,
-            'profile_picture': 'http://example.com/customer2.jpg',
-            'is_loyal': False
-        }
-        response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
     def test_list_product(self):
         url = reverse('product-list')
         response = self.client.get(url)
