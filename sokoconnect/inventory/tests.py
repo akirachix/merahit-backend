@@ -6,6 +6,8 @@ from inventory.models import Product, Discount
 from django.utils import timezone
 from datetime import timedelta
 
+<<<<<<< HEAD
+=======
 class APIMainTests(APITestCase):
     def setUp(self):
         self.mama = MamaMboga.objects.create(
@@ -83,3 +85,4 @@ class APIMainTests(APITestCase):
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+>>>>>>> 65a1ed0369964042125bceed7bb7e090f6831269
