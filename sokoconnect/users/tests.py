@@ -6,7 +6,7 @@ class MamaMbogaAPITestCase(APITestCase):
     def setUp(self):
         self.url = reverse('mamamboga-list')
         self.data = {
-            "full_name": "Mama Mboga",
+            "full_name": "Mahder Belete",
             "phone_number": "0700111222",
             "password": "pass1234",
             "latitude": -1.0,
@@ -31,7 +31,7 @@ class CustomerAPITestCase(APITestCase):
     def setUp(self):
         self.url = reverse('customer-list')
         self.data = {
-            "full_name": "John Doe",
+            "full_name": "Helen yemane,
             "phone_number": "0798765432",
             "password": "pass5678",
             "latitude": 3.21,
