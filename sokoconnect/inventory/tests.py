@@ -46,7 +46,6 @@ class APIMainTests(APITestCase):
             end_date=timezone.now() + timedelta(days=3)
         )
 
-    # ---------------- MAMAMBOGA TESTS -----------------
     def test_list_mamamboga(self):
         url = reverse('mamamboga-list')
         response = self.client.get(url)
@@ -67,7 +66,6 @@ class APIMainTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    # ---------------- CUSTOMER TESTS -----------------
     def test_list_customer(self):
         url = reverse('customer-list')
         response = self.client.get(url)
@@ -87,7 +85,6 @@ class APIMainTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    # ---------------- PRODUCT TESTS -----------------
     def test_list_product(self):
         url = reverse('product-list')
         response = self.client.get(url)
@@ -108,7 +105,6 @@ class APIMainTests(APITestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    # ---------------- DISCOUNT TESTS -----------------
     def test_list_discount(self):
         url = reverse('discount-list')
         response = self.client.get(url)
