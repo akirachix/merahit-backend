@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 
-from reviews.models import VendorReview
-from .serializers import VendorReviewSerializer
+from reviews.models import Review
+from .serializers import ReviewSerializer
 
 
-class VendorReviewSet(viewsets.ModelViewSet):
-    queryset= VendorReview.objects.all()
-    serializer_class= VendorReviewSerializer
+class ReviewSet(viewsets.ModelViewSet):
+    queryset= Review.objects.all()
+    serializer_class= ReviewSerializer

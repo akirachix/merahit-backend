@@ -1,9 +1,9 @@
 from rest_framework.test import APITestCase
 from django.urls import reverse
 from users.models import Customer, MamaMboga
-from reviews.models import VendorReview
+from reviews.models import Review
 
-class VendorReviewAPITest(APITestCase):
+class ReviewAPITest(APITestCase):
     def setUp(self):
         self.customer = Customer.objects.create(
             full_name="Test Customer",
