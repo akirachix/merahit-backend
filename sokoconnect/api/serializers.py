@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from users.models import MamaMboga
-
+from inventory.models import Product,Discount
 from reviews.models import VendorReview
 
 from users.models import Customer
@@ -20,6 +20,17 @@ class CustomerSerializer(serializers.ModelSerializer):
         model=Customer
         fields="__all__"
 
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Product
+        fields="__all__"
+
+class DiscountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Discount
+        fields="__all__"
+=======
 class VendorReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model=VendorReview
@@ -43,3 +54,4 @@ class PaymentSerializer(serializers.ModelSerializer):
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
         fields="__all__"
+
