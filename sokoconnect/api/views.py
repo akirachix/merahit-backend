@@ -2,8 +2,9 @@ from django.shortcuts import render
 
 from rest_framework import viewsets
 from users.models import MamaMboga, Customer
-from order.models import Order,OrderItem,Payment,Cart
-from .serializers import MamaMbogaSerializer, CustomerSerializer,OrderSerializer,OrderItemSerializer,PaymentSerializer,CartSerializer
+
+from order.models import Order,OrderItem,Payment,Cart,VendorReview
+from .serializers import MamaMbogaSerializer, CustomerSerializer,OrderSerializer,OrderItemSerializer,PaymentSerializer,CartSerializer,VendorReviewSerializer
 
 
 class MamaMbogaViewSet(viewsets.ModelViewSet):
@@ -30,3 +31,8 @@ class CartViewSet(viewsets.ModelViewSet):
     queryset=Cart.objects.all()
     serializer_class=CartSerializer
 # Create your views here.
+
+
+class VendorReviewSet(viewsets.ModelViewSet):
+    queryset= VendorReview.objects.all()
+    serializer_class= VendorReviewSerializer
