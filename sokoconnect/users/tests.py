@@ -1,56 +1,58 @@
-from django.test import TestCase
-
-
 from rest_framework.test import APITestCase
-from django.urls import reverse
-from users.models import MamaMboga, Customer
+from rest_framework import status
+from users.models import Users, Customer, MamaMboga
 
-class MamaMbogaAPITestCase(APITestCase):
-    def setUp(self):
-        self.url = reverse('mamamboga-list')
-        self.data = {
-            "full_name": "Mahder Belete",
-            "phone_number": "0700111222",
-            "password": "pass1234",
-            "latitude": -1.0,
-            "longitude": 36.8,
-            "profile_picture": "http://example.com/mama.jpg",
-            "working_days": "Monday-Friday",
-            "working_hours": "8am-5pm"
-        }
+class UsersModelTestCase(APITestCase):
+    def test_create_customer(self):
+        customer = Customer.objects.create(
+            full_name="Test Customer",
+            phone_number="1112223333",
+            password="pass1234",
+            latitude=0.0,
+            longitude=0.0,
+            profile_picture="http://example.com/customer.jpg",
+            is_loyal=True
+        )
+        self.assertEqual(customer.usertype, 'customer')
+        self.assertEqual(customer.full_name, "Test Customer")
+        self.assertTrue(customer.is_loyal)
+        self.assertIsInstance(customer.created_at, type(customer.updated_at))
 
     def test_create_mamamboga(self):
-        response = self.client.post(self.url, self.data, format='json')
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(MamaMboga.objects.count(), 1)
+        mamamboga = MamaMboga.objects.create(
+            full_name="Mama Mboga",
+            phone_number="4445556666",
+            password="pass5678",
+            latitude=1.0,
+            longitude=2.0,
+            profile_picture="http://example.com/mamamboga.jpg",
+            working_days="Mon-Fri",
+            working_hours="8am-5pm"
+        )
+        self.assertEqual(mamamboga.usertype, 'mamamboga')
+        self.assertEqual(mamamboga.full_name, "Mama Mboga")
+        self.assertEqual(mamamboga.working_days, "Mon-Fri")
+        self.assertEqual(mamamboga.working_hours, "8am-5pm")
+        self.assertIsInstance(mamamboga.created_at, type(mamamboga.updated_at))
 
-    def test_list_mamamboga(self):
-        MamaMboga.objects.create(**self.data)
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
-
-class CustomerAPITestCase(APITestCase):
-    def setUp(self):
-        self.url = reverse('customer-list')
-        self.data = {
-            "full_name": "Helen yemane,
-            "phone_number": "0798765432",
-            "password": "pass5678",
-            "latitude": 3.21,
-            "longitude": 1.23,
-            "profile_picture": "http://example.com/pic2.jpg",
-            "is_loyal": True
-        }
-
-    def test_create_customer(self):
-        response = self.client.post(self.url, self.data, format='json')
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(Customer.objects.count(), 1)
-
-    def test_list_customers(self):
-        Customer.objects.create(**self.data)
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
-# Create your tests here.
+    def test_user_str(self):
+        customer = Customer.objects.create(
+            full_name="Test Customer",
+            phone_number="7778889999",
+            password="pass4321",
+            latitude=5.0,
+            longitude=6.0,
+            profile_picture="http://example.com/customer2.jpg"
+        )
+        mamamboga = MamaMboga.objects.create(
+            full_name="Mama Mboga2",
+            phone_number="0001112222",
+            password="pass8765",
+            latitude=9.0,
+            longitude=10.0,
+            profile_picture="http://example.com/mamamboga2.jpg",
+            working_days="Sat-Sun",
+            working_hours="9am-4pm"
+        )
+        self.assertEqual(str(customer), f"Welcome {customer.full_name}")
+        self.assertEqual(str(mamamboga), f"Welcome {mamamboga.full_name}")
