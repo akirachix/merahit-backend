@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'order',
     'users',
     'inventory',
+    'api',
+    'rest_framework',
+   'django_filters',
 ]
 
 MIDDLEWARE = [
