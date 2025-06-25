@@ -1,13 +1,13 @@
-from django.shortcuts import render
-from rest_framework import viewsets
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import viewSet
 
 
-from reviews.models import Review
-from .serializers import ReviewSerializer
+router= DefaultRouter()
+router.register(r"Review",viewSet,basename="feedback")
 
 
 
-
-class viewSet(viewsets.ModelViewSet):
-   queryset= Review.objects.all()
-   serializer_class= ReviewSerializer
+urlpatterns = [
+   path("",include(router.urls))
+]

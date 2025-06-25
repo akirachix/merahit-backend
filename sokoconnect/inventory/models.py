@@ -9,7 +9,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock_quantity = models.PositiveIntegerField()
     stock_unit = models.CharField(max_length=50)
-    product_image =  models.URLField(max_length=200)
+    product_image =  models.URLField(max_length=800)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
