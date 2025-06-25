@@ -12,4 +12,3 @@ router.register(r"Cart",CartViewSet,basename="cart")
 urlpatterns = [
     path("",include(router.urls))
 ]
-
