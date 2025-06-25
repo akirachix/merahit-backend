@@ -1,11 +1,11 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ReviewSet
+from .views import viewSet
 
 
 
 router= DefaultRouter()
-router.register(r"Review",ReviewSet,basename="feedback")
+router.register(r"Review",viewSet,basename="feedback")
 
 
 
