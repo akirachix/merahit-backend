@@ -56,3 +56,4 @@ class UsersModelTestCase(APITestCase):
         )
         self.assertEqual(str(customer), f"Welcome {customer.full_name}")
         self.assertEqual(str(mamamboga), f"Welcome {mamamboga.full_name}")
+

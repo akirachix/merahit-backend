@@ -1,6 +1,6 @@
-
 from rest_framework import serializers
 from users.models import Users, Customer, MamaMboga
+from inventory.models import Product,Discount
 
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,3 +39,15 @@ class MamaMbogaSerializer(serializers.ModelSerializer):
     class Meta:
         model = MamaMboga
         fields = ['id', 'full_name', 'phone_number', 'latitude', 'longitude', 'profile_picture', 'created_at', 'updated_at', 'usertype']
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Product
+        fields="__all__"
+
+class DiscountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Discount
+        fields="__all__"
+
