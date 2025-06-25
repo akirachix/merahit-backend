@@ -222,6 +222,3 @@ class CartModelTest(TestCase):
         self.assertEqual(cart.quantity_of_items, '2 items')
         self.assertIn(self.product, cart.products.all())
         self.assertEqual(str(cart), f"Cart with {self.product.product_name} for {self.customer.full_name}")
-
-
-        

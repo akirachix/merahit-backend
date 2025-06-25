@@ -41,8 +41,9 @@ INSTALLED_APPS = [
     'order',
     'users',
     'inventory',
-   'api',
-   'rest_framework',
+    'api',
+    'rest_framework',
+   'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -85,7 +86,10 @@ DATABASES = {
         'HOST':'aws-0-eu-north-1.pooler.supabase.com',
         'PORT' : '5432',
         'USER':'postgres.vhiiixndtxeyaqzekmks',
-        'PASSWORD' : '1321Nm!!!'
+        'PASSWORD' : '1321Nm!!!',
+        'TEST': {
+            'NAME':'test_sokoconnect'
+        }
     }
 }
 
