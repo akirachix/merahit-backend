@@ -11,6 +11,7 @@ class Order(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
+    
     def __str__(self):
         return f"Order {self.status}"
     
@@ -24,7 +25,7 @@ class OrderItem(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Item {self.product.product_name} in Order {self.order.order_id}"
+        return f"Item {self.product.product_name} in Order {self.order.id}"  
 
 class Payment(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='payments')
@@ -46,4 +47,5 @@ class Cart(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Cart {self.products} for {self.customer.full_name}"
+        product_names = ", ".join([product.product_name for product in self.products.all()]) or "no products"
+        return f"Cart with {product_names} for {self.customer.full_name}" 
