@@ -2,7 +2,8 @@ from rest_framework import serializers
 from order.models import Order,Payment,Cart,OrderItem
 from users.models import Users, Customer, MamaMboga
 from inventory.models import Product,Discount
-from reviews.models import Review
+from rest_framework import serializers
+from reviews.models import Revie
 
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:
@@ -76,10 +77,8 @@ class DiscountSerializer(serializers.ModelSerializer):
         fields="__all__"
 
 
-
-
-
 class ReviewSerializer(serializers.ModelSerializer):
    class Meta:
        model=Review
        fields="__all__"
+
