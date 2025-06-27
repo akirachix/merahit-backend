@@ -2,10 +2,11 @@ from rest_framework import serializers
 from order.models import Order,Payment,Cart,OrderItem
 from users.models import Users, Customer, MamaMboga
 from inventory.models import Product,Discount
-from rest_framework import serializers
-from reviews.models import ReviewSerializer
+from reviews.models import Review
 
-class UsersSerializer(serializers.ModelSerializer):
+
+ 
+class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
         fields = [
