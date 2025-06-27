@@ -15,7 +15,6 @@ class MamaMbogaSerializer(serializers.ModelSerializer):
         fields = ['id', 'full_name', 'phone_number', 'latitude', 'longitude', 'profile_picture', 'created_at', 'updated_at', 'usertype']
 
 class UsersSerializer(serializers.ModelSerializer):
-    # This will delegate serialization to Customer or MamaMboga serializer based on usertype
     def to_representation(self, instance):
         try:
             if instance.usertype == 'customer' and hasattr(instance, 'customer'):
@@ -70,15 +69,12 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class DiscountSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Discount  # Fixed: was mistakenly set to Cart before
+        model = Discount  
         fields = "__all__"
 
 class ReviewSerializer(serializers.ModelSerializer):
-    # Nest vendor and customer serializers to show their details instead of just IDs
     vendor = MamaMbogaSerializer(read_only=True)
     customer = CustomerSerializer(read_only=True)
-
-    # Allow write operations with IDs for vendor and customer
     vendor_id = serializers.PrimaryKeyRelatedField(queryset=MamaMboga.objects.all(), source='vendor', write_only=True)
     customer_id = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.all(), source='customer', write_only=True)
 
