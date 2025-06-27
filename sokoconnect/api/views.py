@@ -4,11 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from order.models import Order,OrderItem,Payment,Cart
 from inventory.models import Product,Discount
 from users.models import Users, Customer, MamaMboga
-from reviews.models import Review
-from .serializers import ReviewSerializer
 from .serializers import UsersSerializer, MamaMbogaSerializer, CustomerSerializer,ProductSerializer,DiscountSerializer,OrderSerializer,OrderItemSerializer,PaymentSerializer,CartSerializer
-from django.shortcuts import render
-from rest_framework import viewsets
 
 from reviews.models import Review
 from .serializers import ReviewSerializer
@@ -18,13 +14,9 @@ class ReviewViewSet(viewsets.ModelViewSet):
     queryset= Review.objects.all()
     serializer_class= ReviewSerializer
 
-class OrderViewSet(viewsets.ModelViewSet):
-    queryset=Order.objects.all()
-    serializer_class=OrderSerializer
+from reviews.models import Review
+from .serializers import ReviewSerializer
 
-class OrderItemViewSet(viewsets.ModelViewSet):
-    queryset=OrderItem.objects.all()
-    serializer_class=OrderItemSerializer
 
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset=Payment.objects.all()
@@ -64,7 +56,6 @@ class DiscountViewSet(viewsets.ModelViewSet):
 class viewSet(viewsets.ModelViewSet):
    queryset= Review.objects.all()
    serializer_class= ReviewSerializer
-
 
 
 

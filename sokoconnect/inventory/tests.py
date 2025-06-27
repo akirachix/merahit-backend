@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -84,3 +84,4 @@ class APIMainTests(APITestCase):
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
