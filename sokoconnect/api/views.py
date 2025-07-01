@@ -39,13 +39,6 @@ class UsersViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['usertype']
 
-class MamaMbogaViewSet(viewsets.ModelViewSet):
-    queryset = MamaMboga.objects.all()
-    serializer_class = MamaMbogaSerializer
-
-class CustomerViewSet(viewsets.ModelViewSet):
-    queryset = Customer.objects.all()
-    serializer_class = CustomerSerializer
 
 
 class ProductViewSet(viewsets.ModelViewSet):
