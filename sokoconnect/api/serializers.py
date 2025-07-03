@@ -7,12 +7,12 @@ from reviews.models import Review
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['id', 'full_name', 'phone_number', 'latitude', 'longitude', 'profile_picture', 'created_at', 'updated_at', 'usertype', 'is_loyal']
+        fields = ['id', 'full_name', 'phone_number', 'latitude', 'longitude', 'profile_picture', 'created_at', 'updated_at', 'usertype', 'is_loyal','address' ]
 
 class MamaMbogaSerializer(serializers.ModelSerializer):
     class Meta:
         model = MamaMboga
-        fields = ['id', 'full_name', 'phone_number', 'latitude', 'longitude', 'profile_picture', 'created_at', 'updated_at', 'usertype']
+        fields = ['id', 'full_name', 'phone_number', 'latitude', 'longitude', 'profile_picture', 'created_at', 'updated_at', 'usertype','address' ]
 
 class UsersSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
@@ -90,3 +90,10 @@ class ReviewSerializer(serializers.ModelSerializer):
             'comment',
             'created_at',
         ]
+
+class STKPushSerializer(serializers.Serializer):
+    phone_number = serializers.CharField()
+    amount = serializers.DecimalField(max_digits=10, decimal_places=2)
+    order_item= serializers.CharField()
+    account_reference = serializers.CharField()
+    transaction_desc = serializers.CharField()

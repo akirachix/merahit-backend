@@ -16,6 +16,7 @@ class Users(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     usertype = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default="mamamboga")
+    address = models .CharField(max_length=300, default="Nairobi, Kenya")
 
     class Meta:
         verbose_name = 'User'
