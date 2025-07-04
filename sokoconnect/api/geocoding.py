@@ -1,48 +1,40 @@
 import requests
 from django.conf import settings
-
-
-def geocode_address(address):
+def forward_geocode(address):
+    if not address:
+        return None, None
     url = "https://nominatim.openstreetmap.org/search"
     params = {
         "q": address,
         "format": "json",
-        "limit": 1
+        "limit": 1,
     }
-    headers = {
-        "User-Agent": "YourAppName/1.0 (your.email@example.com)"
-    }
-    response = requests.get(url, params=params, headers=headers)
-    data = response.json()
-    if data:
-        return {
-            "lat": data[0]["lat"],
-            "lon": data[0]["lon"],
-            "display_name": data[0]["display_name"]
-        }
-    return None
-
-def reverse_geocode(lat, lon):
+    headers = {"User-Agent": settings.NOMINATIM_USER_AGENT}
+    try:
+        response = requests.get(url, params=params, headers=headers, timeout=settings.API_REQUEST_TIMEOUT)
+        response.raise_for_status()
+        data = response.json()
+        if data and len(data) > 0:
+            return float(data[0]["lat"]), float(data[0]["lon"])
+    except requests.RequestException as e:
+        print(f"Forward geocoding error: {e}")
+    return None, None
+def reverse_geocode(latitude, longitude):
+    if latitude is None or longitude is None:
+        return None
     url = "https://nominatim.openstreetmap.org/reverse"
     params = {
-        "lat": lat,
-        "lon": lon,
-        "format": "json"
+        "lat": latitude,
+        "lon": longitude,
+        "format": "json",
     }
-    headers = {
-        "User-Agent": "YourAppName/1.0 (your@email.com)" 
-    }
-    response = requests.get(url, params=params, headers=headers)
-    if response.status_code == 200 and response.text.strip():
-        try:
-            data = response.json()
-        except ValueError:
-            return None
-        if "address" in data:
-            return {
-                "address": data.get("display_name"),
-                "raw": data["address"],
-                "lat": lat,
-                "lon": lon
-            }
+    headers = {"User-Agent": settings.NOMINATIM_USER_AGENT}
+    try:
+        response = requests.get(url, params=params, headers=headers, timeout=settings.API_REQUEST_TIMEOUT)
+        response.raise_for_status()
+        data = response.json()
+        if data and "display_name" in data:
+            return data["display_name"]
+    except requests.RequestException as e:
+        print(f"Reverse geocoding error: {e}")
     return None

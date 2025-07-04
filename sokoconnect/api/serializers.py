@@ -97,3 +97,54 @@ class STKPushSerializer(serializers.Serializer):
     order_item= serializers.CharField()
     account_reference = serializers.CharField()
     transaction_desc = serializers.CharField()
+
+
+class MamaMbogaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MamaMboga
+        fields = '__all__'
+    def create(self, validated_data):
+        address_description = validated_data.get('address_description')
+        if address_description:
+            latitude, longitude = forward_geocode(address_description)
+            if latitude is not None and longitude is not None:
+                validated_data['location_latitude'] = latitude
+                validated_data['location_longitude'] = longitude
+            else:
+                raise serializers.ValidationError("Geocoding failed for the provided address")
+        return super().create(validated_data)
+    def update(self, instance, validated_data):
+        address_description = validated_data.get('address_description', instance.address_description)
+        if address_description and address_description != instance.address_description:
+            latitude, longitude = forward_geocode(address_description)
+            if latitude is not None and longitude is not None:
+                validated_data['location_latitude'] = latitude
+                validated_data['location_longitude'] = longitude
+            else:
+                raise serializers.ValidationError("Geocoding failed for the provided address")
+        return super().update(instance, validated_data)
+
+class CustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = '__all__'
+    def create(self, validated_data):
+        address_description = validated_data.get('address_description')
+        if address_description:
+            latitude, longitude = forward_geocode(address_description)
+            if latitude is not None and longitude is not None:
+                validated_data['location_latitude'] = latitude
+                validated_data['location_longitude'] = longitude
+            else:
+                raise serializers.ValidationError("Geocoding failed for the provided address")
+        return super().create(validated_data)
+    def update(self, instance, validated_data):
+        address_description = validated_data.get('address_description', instance.address_description)
+        if address_description and address_description != instance.address_description:
+            latitude, longitude = forward_geocode(address_description)
+            if latitude is not None and longitude is not None:
+                validated_data['location_latitude'] = latitude
+                validated_data['location_longitude'] = longitude
+            else:
+                raise serializers.ValidationError("Geocoding failed for the provided address")
+        return super().update(instance, validated_data)

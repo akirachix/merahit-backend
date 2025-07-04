@@ -6,6 +6,8 @@ from .views import (
     STKPushView, daraja_callback
 )
 from . import views
+from .views import ForwardGeocodeView,ReverseGeocodeView
+
 
 
 
@@ -24,6 +26,6 @@ urlpatterns = [
     path("", include(router.urls)),
     path('daraja/stk-push/', STKPushView.as_view(), name='daraja-stk-push'),
     path('daraja/callback/', daraja_callback, name='daraja-callback'),
-    path('geocode/', views.geocode_view, name='geocode'),
-    path('reverse-geocode/', views.reverse_geocode_view, name='reverse_geocode'),
+    path('geocode/forward/', ForwardGeocodeView.as_view(), name='geocode-forward'),
+    path('geocode/reverse/', ReverseGeocodeView.as_view(), name='geocode-reverse'),
 ]

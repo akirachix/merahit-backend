@@ -143,4 +143,9 @@ DARAJA_SHORTCODE = '174379'
 DARAJA_PASSKEY = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'
 DARAJA_CALLBACK_URL = 'https://1234abcd.ngrok.io/api/payments/daraja-callback/'
 
+
+from decouple import config
+import os
 GEOPIFY_API_KEY = "d6ffdb356e7c4c428c35fcdb3a461ed6"
+NOMINATIM_USER_AGENT = "greensmtaani_app"  
+API_REQUEST_TIMEOUT = 5  

@@ -1,7 +1,4 @@
 from django.db import models
-
-from .geocoding import geocode_address, reverse_geocode
-
 class Location(models.Model):
     address = models.CharField(max_length=255)
     latitude = models.FloatField(null=True, blank=True)
@@ -20,7 +17,6 @@ class Location(models.Model):
 
 
 from django.http import JsonResponse
-from .geocoding import geocode_address
 
 def geocode_view(request):
     address = request.GET.get('address')

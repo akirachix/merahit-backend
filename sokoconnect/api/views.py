@@ -14,7 +14,6 @@ from .serializers import STKPushSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import JsonResponse
-from .geocoding import geocode_address, reverse_geocode
 
 from .serializers import (
     UsersSerializer,
@@ -97,23 +96,50 @@ def daraja_callback(request):
 
 
 
-def geocode_view(request):
-    address = request.GET.get('address')
-    if not address:
-        return JsonResponse({'error': 'Address is required'}, status=400)
-    
-    result = geocode_address(address)
-    if result:
-        return JsonResponse(result)
-    return JsonResponse({'error': 'Geocoding failed'}, status=500)
 
-def reverse_geocode_view(request):
-    lat = request.GET.get('lat')
-    lon = request.GET.get('lon')
-    if not (lat and lon):
-        return JsonResponse({'error': 'Latitude and longitude are required'}, status=400)
-    
-    result = reverse_geocode(lat, lon)
-    if result:
-        return JsonResponse({'address': result})
-    return JsonResponse({'error': 'Reverse geocoding failed'}, status=500)
+from rest_framework.response import Response
+from .geocoding import forward_geocode, reverse_geocode
+class ReverseGeocodeView(APIView):
+    def post(self, request, *args, **kwargs):
+        latitude = request.data.get('latitude')
+        longitude = request.data.get('longitude')
+        if latitude is None or longitude is None:
+            return Response({"error": "Latitude and longitude are required"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            latitude = float(latitude)
+            longitude = float(longitude)
+        except (ValueError, TypeError):
+            return Response({"error": "Invalid latitude or longitude"}, status=status.HTTP_400_BAD_REQUEST)
+        address = reverse_geocode(latitude, longitude)
+        if address:
+            return Response({"address": address}, status=status.HTTP_200_OK)
+        return Response({"error": "Reverse geocoding failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+class ForwardGeocodeView(APIView):
+    def post(self, request, *args, **kwargs):
+        address = request.data.get('address')
+        if not address:
+            return Response({"error": "Address is required"}, status=status.HTTP_400_BAD_REQUEST)
+        latitude, longitude = forward_geocode(address)
+        if latitude is not None and longitude is not None:
+            return Response({"latitude": latitude, "longitude": longitude}, status=status.HTTP_200_OK)
+        return Response({"error": "Geocoding failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    def get(self, request, *args, **kwargs):
+        address = request.query_params.get('address')
+        if not address:
+            return Response({"error": "Address is required"}, status=status.HTTP_400_BAD_REQUEST)
+        latitude, longitude = forward_geocode(address)
+        if latitude is not None and longitude is not None:
+            return Response({"latitude": latitude, "longitude": longitude}, status=status.HTTP_200_OK)
+        return Response({"error": "Geocoding failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+
+
+
+
+
+
+
+
