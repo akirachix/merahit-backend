@@ -3,16 +3,18 @@ from order.models import Order, Payment, Cart, OrderItem
 from users.models import Users, Customer, MamaMboga
 from inventory.models import Product, Discount
 from reviews.models import Review
+from .daraja import DarajaAPI
+from datetime import datetime
 
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['id', 'full_name', 'phone_number', 'latitude', 'longitude', 'profile_picture', 'created_at', 'updated_at', 'usertype', 'is_loyal']
+        fields = ['id', 'full_name', 'phone_number', 'latitude', 'longitude', 'profile_picture', 'created_at', 'updated_at', 'usertype', 'is_loyal','address' ]
 
 class MamaMbogaSerializer(serializers.ModelSerializer):
     class Meta:
         model = MamaMboga
-        fields = ['id', 'full_name', 'phone_number', 'latitude', 'longitude', 'profile_picture', 'created_at', 'updated_at', 'usertype']
+        fields = ['id', 'full_name', 'phone_number', 'latitude', 'longitude', 'profile_picture', 'created_at', 'updated_at', 'usertype','address' ]
 
 class UsersSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
@@ -55,7 +57,13 @@ class OrderItemSerializer(serializers.ModelSerializer):
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
-        fields = "__all__"
+        fields =     fields = [
+            'payment_id', 'status', 'amount',
+            'merchant_request_id', 'checkout_request_id', 'result_code',
+            'result_desc', 'mpesa_receipt_number', 'phone_number',
+            'transaction_date', 'updated_at','order'
+        ]
+        read_only_fields= ['payment_id','created_at','updated_at']
 
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
@@ -90,3 +98,68 @@ class ReviewSerializer(serializers.ModelSerializer):
             'comment',
             'created_at',
         ]
+
+class STKPushSerializer(serializers.Serializer):
+    phone_number = serializers.CharField()
+    amount = serializers.DecimalField(max_digits=10, decimal_places=2)
+    order_item= serializers.ListField()
+    account_reference = serializers.CharField(max_length=12, default="TX12345")
+    transaction_desc = serializers.CharField()
+
+class DarajaAPISerializer(serializers.Serializer):
+    class Meta:
+        model= Payment
+        fields= '__all__'
+
+
+class MamaMbogaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MamaMboga
+        fields = '__all__'
+    def create(self, validated_data):
+        address_description = validated_data.get('address_description')
+        if address_description:
+            latitude, longitude = forward_geocode(address_description)
+            if latitude is not None and longitude is not None:
+                validated_data['location_latitude'] = latitude
+                validated_data['location_longitude'] = longitude
+            else:
+                raise serializers.ValidationError("Geocoding failed for the provided address")
+        return super().create(validated_data)
+    def update(self, instance, validated_data):
+        address_description = validated_data.get('address_description', instance.address_description)
+        if address_description and address_description != instance.address_description:
+            latitude, longitude = forward_geocode(address_description)
+            if latitude is not None and longitude is not None:
+                validated_data['location_latitude'] = latitude
+                validated_data['location_longitude'] = longitude
+            else:
+                raise serializers.ValidationError("Geocoding failed for the provided address")
+        return super().update(instance, validated_data)
+
+class CustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = '__all__'
+    def create(self, validated_data):
+        address_description = validated_data.get('address_description')
+        if address_description:
+            latitude, longitude = forward_geocode(address_description)
+            if latitude is not None and longitude is not None:
+                validated_data['location_latitude'] = latitude
+                validated_data['location_longitude'] = longitude
+            else:
+                raise serializers.ValidationError("Geocoding failed for the provided address")
+        return super().create(validated_data)
+    def update(self, instance, validated_data):
+        address_description = validated_data.get('address_description', instance.address_description)
+        if address_description and address_description != instance.address_description:
+            latitude, longitude = forward_geocode(address_description)
+            if latitude is not None and longitude is not None:
+                validated_data['location_latitude'] = latitude
+                validated_data['location_longitude'] = longitude
+            else:
+                raise serializers.ValidationError("Geocoding failed for the provided address")
+        return super().update(instance, validated_data)
+
+

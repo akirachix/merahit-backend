@@ -4,6 +4,7 @@ from users.models import Customer, MamaMboga
 from inventory.models import Product
 
 class Order(models.Model):
+    order_id=models.AutoField(primary_key=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
     vendor = models.ForeignKey(MamaMboga, on_delete=models.CASCADE, related_name='orders')
     order_date = models.DateTimeField(default=timezone.now)
@@ -13,7 +14,7 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return f"Order {self.status}"
+        return f"Order {self.order_id}"
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_items')
@@ -25,15 +26,89 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"Item {self.product.product_name} in Order {self.order.id}"  
-class Payment(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='payments')
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_status = models.CharField(max_length=50)
-    payment_date = models.DateTimeField(default=timezone.now)
-    updated_at = models.DateTimeField(auto_now=True)
+# class Payment(models.Model):
+#     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='payments')
+#     amount = models.DecimalField(max_digits=10, decimal_places=2)
+#     payment_status = models.CharField(max_length=50)
+#     payment_date = models.DateTimeField(default=timezone.now)
+#     updated_at = models.DateTimeField(auto_now=True)
 
+#     def __str__(self):
+#         return f"Payment {self.payment_status}"
+
+class Payment(models.Model):
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('success', 'Success'),
+        ('failed', 'Failed'),
+    )
+    payment_id = models.AutoField(primary_key=True)
+    order= models.ForeignKey(Order, on_delete=models.CASCADE, related_name='payments')
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending',
+        help_text="Payment status"
+    )
+    amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        help_text="Payment amount"
+    )
+    merchant_request_id = models.CharField(max_length=100, unique=True, default='test123')
+    checkout_request_id = models.CharField(
+        max_length=100,
+        unique=True,
+        blank=True,
+        null=True,
+        help_text="Unique Checkout Request ID from M-Pesa"
+    )
+    result_code = models.CharField(
+        max_length=10,
+        blank=True,
+        null=True,
+        help_text="M-Pesa Result Code"
+    )
+    result_desc = models.TextField(
+        blank=True,
+        null=True,
+        help_text="M-Pesa Result Description"
+    )
+    mpesa_receipt_number = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        help_text="M-Pesa Transaction Receipt Number"
+    )
+    phone_number = models.CharField(
+        max_length=15,
+        blank=True,
+        null=True,
+        help_text="Phone number used for payment"
+    )
+    transaction_date = models.DateTimeField(
+        blank=True,
+        null=True,
+        help_text="Date and time of the transaction"
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        help_text="Timestamp when the payment record was last updated"
+    )
+    class Meta:
+        verbose_name = "Payment"
+        verbose_name_plural = "Payments"
+        indexes = [
+            models.Index(fields=['merchant_request_id']),
+            models.Index(fields=['checkout_request_id']),
+            models.Index(fields=['status']),
+            models.Index(fields=['order_id']),
+        ]
     def __str__(self):
-        return f"Payment {self.payment_status}"
+        return f"Payment {self.payment_id} for Order {self.order_id.order_id} ({self.status})"
+
+
 
 class Cart(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='carts')

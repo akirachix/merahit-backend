@@ -135,3 +135,35 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+DARAJA_CONSUMER_KEY = 'niJ9gLDemh4EaLqsBfxAvsm0k6hBpOjRpAeDYW86gmVyTgSd'
+DARAJA_CONSUMER_SECRET = '8QxlAcGjfBAHwbYRAWdvJIvBtAOmsw4vk62eACNHaky9exWQQIReA02HXoql9A0j'
+DARAJA_SHORTCODE = '174379' 
+DARAJA_PASSKEY = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'
+DARAJA_CALLBACK_URL = 'https://1234abcd.ngrok.io/api/payments/daraja-callback/'
+
+
+# import os
+# from pathlib import Path
+# from decouple import config
+# LIPANAMPESA_SHORTCODE = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'
+# LIPANAMPESA_PASSKEY = config('LIPANAMPESA_PASSKEY', default='bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919')
+# CONSUMER_KEY = 'niJ9gLDemh4EaLqsBfxAvsm0k6hBpOjRpAeDYW86gmVyTgSd'
+# CONSUMER_SECRET = '8QxlAcGjfBAHwbYRAWdvJIvBtAOmsw4vk62eACNHaky9exWQQIReA02HXoql9A0j'
+# BUSINESS_SHORT_CODE = '174379'
+# TRANSACTION_TYPE = 'CustomerBuyGoodsOnline'
+# CALL_BACK_URL = 'https://b968-41-90-172-243.ngrok-free.app'
+# ACCOUNT_REFERENCE = 'CompanyXLTD'
+# TRANSACTION_DESCRIPTION = 'Payment of x'
+# ACCESS_TOKEN_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
+# API_RESOURCE_URL = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
+
+# BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+from decouple import config
+import os
+GEOPIFY_API_KEY = "d6ffdb356e7c4c428c35fcdb3a461ed6"
+NOMINATIM_USER_AGENT = "sokoconnect_app"  
+API_REQUEST_TIMEOUT = 5  
