@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
-
+import requests
 from order.models import Order, OrderItem, Payment, Cart
 from inventory.models import Product, Discount
 from users.models import Users, Customer, MamaMboga
@@ -14,6 +14,13 @@ from .serializers import STKPushSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import JsonResponse
+from django.conf import settings
+from .encode_base64 import base64
+from .access_token import generate_access_token
+from .utils import timestamp_conversation
+from decimal import Decimal,InvalidOperation
+
+
 
 from .serializers import (
     UsersSerializer,
@@ -95,8 +102,6 @@ def daraja_callback(request):
     return Response({"ResultCode": 0, "ResultDesc": "Accepted"})
 
 
-
-
 from rest_framework.response import Response
 from .geocoding import forward_geocode, reverse_geocode
 class ReverseGeocodeView(APIView):
@@ -131,6 +136,11 @@ class ForwardGeocodeView(APIView):
         if latitude is not None and longitude is not None:
             return Response({"latitude": latitude, "longitude": longitude}, status=status.HTTP_200_OK)
         return Response({"error": "Geocoding failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+
 
 
 

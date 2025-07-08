@@ -3,6 +3,8 @@ from order.models import Order, Payment, Cart, OrderItem
 from users.models import Users, Customer, MamaMboga
 from inventory.models import Product, Discount
 from reviews.models import Review
+from .daraja import DarajaAPI
+from datetime import datetime
 
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -55,7 +57,13 @@ class OrderItemSerializer(serializers.ModelSerializer):
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
-        fields = "__all__"
+        fields =     fields = [
+            'payment_id', 'status', 'amount',
+            'merchant_request_id', 'checkout_request_id', 'result_code',
+            'result_desc', 'mpesa_receipt_number', 'phone_number',
+            'transaction_date', 'updated_at','order'
+        ]
+        read_only_fields= ['payment_id','created_at','updated_at']
 
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
@@ -94,9 +102,14 @@ class ReviewSerializer(serializers.ModelSerializer):
 class STKPushSerializer(serializers.Serializer):
     phone_number = serializers.CharField()
     amount = serializers.DecimalField(max_digits=10, decimal_places=2)
-    order_item= serializers.CharField()
-    account_reference = serializers.CharField()
+    order_item= serializers.ListField()
+    account_reference = serializers.CharField(max_length=12, default="TX12345")
     transaction_desc = serializers.CharField()
+
+class DarajaAPISerializer(serializers.Serializer):
+    class Meta:
+        model= Payment
+        fields= '__all__'
 
 
 class MamaMbogaSerializer(serializers.ModelSerializer):
@@ -148,3 +161,5 @@ class CustomerSerializer(serializers.ModelSerializer):
             else:
                 raise serializers.ValidationError("Geocoding failed for the provided address")
         return super().update(instance, validated_data)
+
+

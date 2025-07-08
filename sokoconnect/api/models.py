@@ -39,5 +39,7 @@ def reverse_geocode_view(request):
         return JsonResponse({'address': result})
     return JsonResponse({'error': 'Reverse geocoding failed'}, status=500)
 
+    
+
 
 
