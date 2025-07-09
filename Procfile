@@ -1,1 +1,0 @@
-web:gunicorn_sokoconnect.wsgi -log-file -
