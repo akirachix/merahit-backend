@@ -4,7 +4,6 @@ from users.models import Customer, MamaMboga
 from inventory.models import Product
 
 class Order(models.Model):
-    order_id=models.AutoField(primary_key=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
     vendor = models.ForeignKey(MamaMboga, on_delete=models.CASCADE, related_name='orders')
     order_date = models.DateTimeField(default=timezone.now)
@@ -12,9 +11,10 @@ class Order(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
-        return f"Order {self.order_id}"
+        return f"Order {self.id}"
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_items')
@@ -25,16 +25,7 @@ class OrderItem(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Item {self.product.product_name} in Order {self.order.id}"  
-# class Payment(models.Model):
-#     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='payments')
-#     amount = models.DecimalField(max_digits=10, decimal_places=2)
-#     payment_status = models.CharField(max_length=50)
-#     payment_date = models.DateTimeField(default=timezone.now)
-#     updated_at = models.DateTimeField(auto_now=True)
-
-#     def __str__(self):
-#         return f"Payment {self.payment_status}"
+        return f"Item {self.product.product_name} in Order {self.order.id}"
 
 class Payment(models.Model):
     STATUS_CHOICES = (
@@ -42,8 +33,7 @@ class Payment(models.Model):
         ('success', 'Success'),
         ('failed', 'Failed'),
     )
-    payment_id = models.AutoField(primary_key=True)
-    order= models.ForeignKey(Order, on_delete=models.CASCADE, related_name='payments')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='payments')
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
@@ -91,7 +81,6 @@ class Payment(models.Model):
         null=True,
         help_text="Date and time of the transaction"
     )
-
     updated_at = models.DateTimeField(
         auto_now=True,
         help_text="Timestamp when the payment record was last updated"
@@ -103,12 +92,10 @@ class Payment(models.Model):
             models.Index(fields=['merchant_request_id']),
             models.Index(fields=['checkout_request_id']),
             models.Index(fields=['status']),
-            models.Index(fields=['order_id']),
+            models.Index(fields=['order']),
         ]
     def __str__(self):
-        return f"Payment {self.payment_id} for Order {self.order_id.order_id} ({self.status})"
-
-
+        return f"Payment {self.id} for Order {self.order.id} ({self.status})"
 
 class Cart(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='carts')
@@ -121,4 +108,4 @@ class Cart(models.Model):
 
     def __str__(self):
         product_names = ", ".join([product.product_name for product in self.products.all()]) or "no products"
-        return f"Cart with {product_names} for {self.customer.full_name}" 
+        return f"Cart with {product_names} for {self.customer.full_name}"
