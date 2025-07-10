@@ -1,1 +1,1 @@
-web: gunicorn sokoconnect.wsgi -log-file -
+web: gunicorn sokoconnect.wsgi --log-file -
