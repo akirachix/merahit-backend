@@ -1,26 +1,46 @@
 from rest_framework import serializers
 from order.models import Order, Payment, Cart, OrderItem
-from users.models import Users, Customer, MamaMboga
+from users.models import Users, Customer, MamaMboga,Admin
 from inventory.models import Product, Discount
 from reviews.models import Review
 from .daraja import DarajaAPI
 from datetime import datetime
+from django.contrib.auth.models import User
+
 
 
 class CustomerSerializer(serializers.ModelSerializer):
-   class Meta:
+    password = serializers.CharField(write_only=True)
+    class Meta:
        model = Customer
-       fields = ['id', 'full_name', 'phone_number', 'latitude', 'longitude', 'profile_picture', 'created_at', 'updated_at', 'usertype', 'is_loyal','address' ]
+       fields = ['id', 'full_name', 'phone_number', 'profile_picture', 'created_at', 'updated_at', 'usertype', 'is_loyal' ]
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')
+        user = User.objects.create_user(**user_data)
+        return Customer.objects.create(user=user, **validated_data)
 
 
 class MamaMbogaSerializer(serializers.ModelSerializer):
-   class Meta:
+    password = serializers.CharField(write_only=True)
+    class Meta:
        model = MamaMboga
-       fields = ['id', 'full_name', 'phone_number', 'latitude', 'longitude', 'profile_picture', 'created_at', 'updated_at', 'usertype','address' ]
+       fields = ['id', 'full_name', 'phone_number','profile_picture', 'created_at', 'updated_at', 'usertype' ]
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')
+        user = User.objects.create_user(**user_data)
+        return Customer.objects.create(user=user, **validated_data)
+
+###
+class AdminSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    class Meta:
+        model = Admin
+        fields="__all__"
 
 
 class UsersSerializer(serializers.ModelSerializer):
-   def to_representation(self, instance):
+    password = serializers.CharField(write_only=True)
+    def to_representation(self, instance):
        try:
            if instance.usertype == 'customer' and hasattr(instance, 'customer'):
                serializer = CustomerSerializer(instance.customer)
@@ -33,7 +53,7 @@ class UsersSerializer(serializers.ModelSerializer):
            return super().to_representation(instance)
 
 
-   class Meta:
+    class Meta:
        model = Users
        fields = [
            'id',
@@ -66,7 +86,7 @@ class PaymentSerializer(serializers.ModelSerializer):
    class Meta:
        model = Payment
        fields =     fields = [
-           'payment_id', 'status', 'amount',
+            'status', 'amount',
            'merchant_request_id', 'checkout_request_id', 'result_code',
            'result_desc', 'mpesa_receipt_number', 'phone_number',
            'transaction_date', 'updated_at','order'
@@ -179,3 +199,5 @@ class CustomerSerializer(serializers.ModelSerializer):
            else:
                raise serializers.ValidationError("Geocoding failed for the provided address")
        return super().update(instance, validated_data)
+
+

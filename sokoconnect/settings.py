@@ -35,6 +35,8 @@ INSTALLED_APPS = [
    'api',
    'rest_framework',
    'django_filters',
+   'rest_framework.authtoken',
+   'geolocation',
 ]
 
 
@@ -49,6 +51,12 @@ MIDDLEWARE = [
    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
 
 ROOT_URLCONF = 'sokoconnect.urls'
 
