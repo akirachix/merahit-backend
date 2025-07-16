@@ -113,10 +113,7 @@ class DiscountSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-   vendor = MamaMbogaSerializer(read_only=True)
-   customer = CustomerSerializer(read_only=True)
-   vendor_id = serializers.PrimaryKeyRelatedField(queryset=MamaMboga.objects.all(), source='vendor', write_only=True)
-   customer_id = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.all(), source='customer', write_only=True)
+
 
 
    class Meta:

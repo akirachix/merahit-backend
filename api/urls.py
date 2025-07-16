@@ -19,6 +19,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 
 
+
 router = DefaultRouter()
 router.register(r"Order", OrderViewSet, basename="order")
 router.register(r"OrderItem", OrderItemViewSet, basename="orderitem")
@@ -33,7 +34,7 @@ router.register(r"Review", ReviewViewSet, basename="feedback")
 
 urlpatterns = [
     path("", include(router.urls)),
-    path('login/', obtain_auth_token),  
+     path('login/', obtain_auth_token),  
     path('daraja/stk-push/', STKPushView.as_view(), name='daraja-stk-push'),
     path('daraja/callback/', daraja_callback, name='daraja-callback'),
   

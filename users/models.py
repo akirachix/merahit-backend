@@ -8,7 +8,6 @@ class Users(models.Model):
     USER_TYPE_CHOICES = (
         ('customer', 'Customer'),
         ('mamamboga', 'Mama Mboga'),
-        ('admin','Admin'),
     )
 
     full_name = models.CharField(max_length=100)
@@ -25,7 +24,8 @@ class Users(models.Model):
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
-
+    def __str__(self):
+        return f"{self.usertype} {self.id}"
 class Customer(Users):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_loyal = models.BooleanField(default=False)
