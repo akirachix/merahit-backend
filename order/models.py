@@ -1,11 +1,11 @@
 from django.db import models
 from django.utils import timezone
-from users.models import Customer, MamaMboga
+from users.models import Users
 from inventory.models import Product
 
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
-    vendor = models.ForeignKey(MamaMboga, on_delete=models.CASCADE, related_name='orders')
+    customer = models.ForeignKey(Users, on_delete=models.CASCADE,limit_choices_to={'usertype': 'customer'},related_name='customer_orders',)
+    vendor = models.ForeignKey(Users, on_delete=models.CASCADE, limit_choices_to={'usertype': 'mamamboga'},related_name='vendor_orders',)
     order_date = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=50)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -98,7 +98,7 @@ class Payment(models.Model):
         return f"Payment {self.id} for Order {self.order.id} ({self.status})"
 
 class Cart(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='carts')
+    customer = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='carts', limit_choices_to={'usertype': 'customer'})
     products = models.ManyToManyField(Product, related_name='carts')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     number_of_items = models.PositiveIntegerField()

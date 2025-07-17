@@ -42,3 +42,11 @@ class MamaMboga(Users):
 
     def __str__(self):
         return f"Welcome {self.full_name}"
+
+###
+class Admin(models.Model):
+    user_name = models.CharField(max_length=30)
+    password = models.CharField(max_length=8)
+
+
+

@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import dj_database_url
 
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -35,6 +36,9 @@ INSTALLED_APPS = [
    'api',
    'rest_framework',
    'django_filters',
+   'rest_framework.authtoken',
+   'geolocation',
+   'corsheaders',
 ]
 
 
@@ -42,6 +46,7 @@ MIDDLEWARE = [
    'django.middleware.security.SecurityMiddleware',
    'whitenoise.middleware.WhiteNoiseMiddleware',
    'django.contrib.sessions.middleware.SessionMiddleware',
+   'corsheaders.middleware.CorsMiddleware',
    'django.middleware.common.CommonMiddleware',
    'django.middleware.csrf.CsrfViewMiddleware',
    'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -49,6 +54,14 @@ MIDDLEWARE = [
    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
 
 ROOT_URLCONF = 'sokoconnect.urls'
 
