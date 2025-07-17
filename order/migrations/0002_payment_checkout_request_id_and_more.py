@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
+        migrations.AddField(
             model_name='payment',
             name='payment_status',
             field=models.CharField(default='Pending', max_length=50),
