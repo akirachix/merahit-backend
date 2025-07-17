@@ -1,8 +1,5 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
-
-
 
 class Users(models.Model):
     USER_TYPE_CHOICES = (
@@ -24,10 +21,8 @@ class Users(models.Model):
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
-    def __str__(self):
-        return f"{self.usertype} {self.id}"
+
 class Customer(Users):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_loyal = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
@@ -35,10 +30,9 @@ class Customer(Users):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.full_name}"
+        return f"Welcome {self.full_name}"
 
 class MamaMboga(Users):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
     working_days = models.CharField(max_length=200)
     working_hours = models.CharField(max_length=200)
 
@@ -47,7 +41,7 @@ class MamaMboga(Users):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.full_name}"
+        return f"Welcome {self.full_name}"
 
 ###
 class Admin(models.Model):

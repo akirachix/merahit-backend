@@ -110,40 +110,6 @@ def daraja_callback(request):
     return Response({"ResultCode": 0, "ResultDesc": "Accepted"})
 
 
-# from rest_framework.response import Response
-# from .geocoding import forward_geocode, reverse_geocode
-# class ReverseGeocodeView(APIView):
-#     def post(self, request, *args, **kwargs):
-#         latitude = request.data.get('latitude')
-#         longitude = request.data.get('longitude')
-#         if latitude is None or longitude is None:
-#             return Response({"error": "Latitude and longitude are required"}, status=status.HTTP_400_BAD_REQUEST)
-#         try:
-#             latitude = float(latitude)
-#             longitude = float(longitude)
-#         except (ValueError, TypeError):
-#             return Response({"error": "Invalid latitude or longitude"}, status=status.HTTP_400_BAD_REQUEST)
-#         address = reverse_geocode(latitude, longitude)
-#         if address:
-#             return Response({"address": address}, status=status.HTTP_200_OK)
-#         return Response({"error": "Reverse geocoding failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-# class ForwardGeocodeView(APIView):
-#     def post(self, request, *args, **kwargs):
-#         address = request.data.get('address')
-#         if not address:
-#             return Response({"error": "Address is required"}, status=status.HTTP_400_BAD_REQUEST)
-#         latitude, longitude = forward_geocode(address)
-#         if latitude is not None and longitude is not None:
-#             return Response({"latitude": latitude, "longitude": longitude}, status=status.HTTP_200_OK)
-#         return Response({"error": "Geocoding failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-#     def get(self, request, *args, **kwargs):
-#         address = request.query_params.get('address')
-#         if not address:
-#             return Response({"error": "Address is required"}, status=status.HTTP_400_BAD_REQUEST)
-#         latitude, longitude = forward_geocode(address)
-#         if latitude is not None and longitude is not None:
-#             return Response({"latitude": latitude, "longitude": longitude}, status=status.HTTP_200_OK)
-#         return Response({"error": "Geocoding failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
