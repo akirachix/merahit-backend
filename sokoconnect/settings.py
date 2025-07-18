@@ -123,7 +123,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# External API keys and secrets loaded from environment variables
 DARAJA_CONSUMER_KEY = os.getenv('DARAJA_CONSUMER_KEY')
 DARAJA_CONSUMER_SECRET = os.getenv('DARAJA_CONSUMER_SECRET')
 DARAJA_SHORTCODE = os.getenv('DARAJA_SHORTCODE')
@@ -134,10 +133,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 GEOPIFY_API_KEY = os.getenv('GEOPIFY_API_KEY')
 
-
 NOMINATIM_USER_AGENT = "sokoconnect_app"
 API_REQUEST_TIMEOUT = 5
-
 
 FCM_NOTIFICATION_APIKEY = os.getenv("FCM_NOTIFICATION_APIKEY", default="")
 FCM_NOTIFICATION_SENDER_ID = os.getenv("FCM_NOTIFICATION_SENDER_ID", default="")
