@@ -11,7 +11,7 @@ class UserCreationWithPasswordForm(forms.ModelForm):
     )
     class Meta:
         model = Users
-        fields = ('phone_number', 'first_name', 'last_name', 'role')
+        fields = ('phone_number', 'full_name', 'usertype')
     def clean_password(self):
         password = self.cleaned_data.get('password')
         if not re.fullmatch(r'\d{4}', password):

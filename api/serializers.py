@@ -3,8 +3,6 @@ from order.models import Order, Payment, Cart, OrderItem
 from users.models import Users
 from inventory.models import Product, Discount
 from reviews.models import Review
-from .daraja import DarajaAPI
-from django.contrib.auth.models import User
 class UsersSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     def create(self, validated_data):
@@ -25,19 +23,20 @@ class UsersSerializer(serializers.ModelSerializer):
         model = Users
         fields = [
             'id',
-            'first_name',
-            'last_name',
+            'full_name',
             'phone_number',
             'password',
             'latitude',
             'longitude',
-            'user_image',
-            'role',
+            'profile_picture',
+            'usertype',
             'address',
-            'till_number',
             'is_active',
             'is_staff',
+            'created_at',
+            'updated_at',
         ]
+        read_only_fields = ['created_at', 'updated_at']
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
@@ -91,3 +90,6 @@ class DarajaAPISerializer(serializers.Serializer):
     class Meta:
         model = Payment
         fields = '__all__'
+
+
+

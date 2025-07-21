@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
-# Removed requests, utils, base64 as they are not used in this snippet
 from order.models import Order, OrderItem, Payment, Cart
 from inventory.models import Product, Discount
 from users.models import Users
@@ -13,7 +12,6 @@ from .daraja import DarajaAPI
 from .serializers import STKPushSerializer
 from rest_framework.decorators import api_view
 from django.http import JsonResponse
-# Removed Django settings, decimal imports as they are not used in this snippet
 from .serializers import (
     UsersSerializer,
     ProductSerializer,
@@ -35,25 +33,21 @@ class Signup(APIView):
     def post(self, request):
         phone = request.data.get('phone_number')
         password = request.data.get('password')
-        first_name = request.data.get('first_name')
-        last_name = request.data.get('last_name')
-        role = request.data.get('role')
-        address = request.data.get('address')
+        full_name = request.data.get('full_name')
+        usertype = request.data.get('usertype')
+        address = request.data.get('address', 'Nairobi, Kenya')
         latitude = request.data.get('latitude')
         longitude = request.data.get('longitude')
-        user_image = request.data.get('user_image')
-        till_number = request.data.get('till_number')  # Get till_number for vendor if provided
+        profile_picture = request.data.get('profile_picture')
         try:
             user = Users(
                 phone_number=phone,
-                first_name=first_name,
-                last_name=last_name,
-                role=role,
+                full_name=full_name,
+                usertype=usertype,
                 address=address,
                 latitude=latitude,
                 longitude=longitude,
-                user_image=user_image,
-                till_number=till_number if role == 'vendor' else None,
+                profile_picture=profile_picture,
             )
             user.set_password(password)
             user.save()
@@ -77,9 +71,9 @@ class Login(APIView):
             return Response({'error': f'Token creation failed: {exc}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response({
             'token': token.key,
-            'role': user.role,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
+            'usertype': user.usertype,
+            'full_name': user.full_name,
+            'phone_number': user.phone_number,
         })
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
@@ -140,3 +134,15 @@ class STKPushView(APIView):
 def daraja_callback(request):
     print("Daraja Callback Data:", request.data)
     return Response({"ResultCode": 0, "ResultDesc": "Accepted"})
+
+
+
+
+
+
+
+
+
+
+
+

@@ -5,7 +5,7 @@ class Product(models.Model):
     vendor = models.ForeignKey(
         Users,
         on_delete=models.CASCADE,
-        limit_choices_to={'role': 'vendor'},  # changed from 'usertype': 'mamamboga'
+        limit_choices_to={'usertype': 'mamamboga'},
         related_name='products',
     )
     product_name = models.CharField(
@@ -62,7 +62,7 @@ class Product(models.Model):
             ('piece','Piece')
         ]
     )
-    product_image =  models.URLField(max_length=800)
+    product_image = models.URLField(max_length=800)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
@@ -72,7 +72,7 @@ class Discount(models.Model):
     vendor = models.ForeignKey(
         Users,
         on_delete=models.CASCADE,
-        limit_choices_to={'role': 'vendor'},  # changed from 'usertype': 'mamamboga'
+        limit_choices_to={'usertype': 'mamamboga'},
         related_name='mamamboga_discount',
     )
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='discounts')
@@ -89,11 +89,11 @@ class LoyalCustomerDiscount(models.Model):
     customer = models.ForeignKey(
         Users,
         on_delete=models.CASCADE,
-        limit_choices_to={'role': 'customer'},
+        limit_choices_to={'usertype': 'customer'},
         related_name='customer_discount'
     )
     received = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
-        return f"Loyal Discount for {self.customer.get_full_name()}"
+        return f"Loyal Discount for {self.customer.full_name}"
