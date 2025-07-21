@@ -6,13 +6,12 @@ from inventory.models import Product, Discount
 from users.models import Users
 from reviews.models import Review
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .daraja import DarajaAPI
-from .serializers import STKPushSerializer
-from rest_framework.decorators import api_view
-from django.http import JsonResponse
 from .serializers import (
+    STKPushSerializer,
     UsersSerializer,
     ProductSerializer,
     DiscountSerializer,
@@ -24,10 +23,42 @@ from .serializers import (
 )
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, BasePermission, SAFE_METHODS # Import BasePermission and SAFE_METHODS for DiscountPermission
+# Import all custom permission classes
 from users.permissions import (
-    IsVendor, IsCustomer, IsAdminOrSelf, ProductPermission, ReviewPermission
+    IsVendor, IsCustomer, IsAdminOrSelf, ProductPermission, ReviewPermission,
+    OrderPermission, OrderItemPermission, PaymentPermission, CartPermission
 )
+# New DiscountPermission class (add this to your users/permissions.py)
+class DiscountPermission(BasePermission):
+    """
+    Access rules for Discounts:
+    - Admins have full access.
+    - Mamamboga (vendors) can create/update/delete their own discounts.
+    - Customers can only read (GET) discounts.
+    """
+    def has_permission(self, request, view):
+        user = request.user
+        if not user.is_authenticated:
+            return False
+        if user.is_staff:
+            return True
+        if user.usertype == 'mamamboga':
+            return True # Mamamboga can create/manage discounts
+        if user.usertype == 'customer':
+            return request.method in SAFE_METHODS # Customers can only read
+        return False
+    def has_object_permission(self, request, view, obj):
+        user = request.user
+        if user.is_staff:
+            return True
+        if user.usertype == 'mamamboga':
+            # Assuming Discount model has a 'vendor' ForeignKey or similar
+            # that links it to the Mamamboga user
+            return hasattr(obj, 'vendor') and obj.vendor == user
+        if user.usertype == 'customer':
+            return request.method in SAFE_METHODS
+        return False
 class Signup(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
@@ -82,25 +113,25 @@ class ReviewViewSet(viewsets.ModelViewSet):
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
+    permission_classes = [PaymentPermission] # Applied new permission
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
+    permission_classes = [CartPermission] # Applied new permission
 class UsersViewSet(viewsets.ModelViewSet):
     queryset = Users.objects.all()
     serializer_class = UsersSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['role']
+    filterset_fields = ['usertype']
     permission_classes = [IsAdminOrSelf]
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
         for user_data in response.data:
-            if 'till_number' in user_data:
-                user_data.pop('till_number')
+            user_data.pop('till_number', None)
         return response
     def retrieve(self, request, *args, **kwargs):
         response = super().retrieve(request, *args, **kwargs)
-        if 'till_number' in response.data:
-            response.data.pop('till_number')
+        response.data.pop('till_number', None)
         return response
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
@@ -109,12 +140,15 @@ class ProductViewSet(viewsets.ModelViewSet):
 class DiscountViewSet(viewsets.ModelViewSet):
     queryset = Discount.objects.all()
     serializer_class = DiscountSerializer
+    permission_classes = [DiscountPermission] # Applied new permission
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    permission_classes = [OrderPermission] # Applied new permission
 class OrderItemViewSet(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
+    permission_classes = [OrderItemPermission] # Applied new permission
 class STKPushView(APIView):
     def post(self, request):
         serializer = STKPushSerializer(data=request.data)
@@ -134,6 +168,11 @@ class STKPushView(APIView):
 def daraja_callback(request):
     print("Daraja Callback Data:", request.data)
     return Response({"ResultCode": 0, "ResultDesc": "Accepted"})
+    
+# @api_view(['POST'])
+# def daraja_callback(request):
+#     print("Daraja Callback Data:", request.data)
+#     return Response({"ResultCode": 0, "ResultDesc": "Accepted"})
 
 
 
