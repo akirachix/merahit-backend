@@ -42,9 +42,9 @@ class DiscountPermission(BasePermission):
         if user.is_staff:
             return True
         if user.usertype == 'mamamboga':
-            return True # Mamamboga can create/manage discounts
+            return True
         if user.usertype == 'customer':
-            return request.method in SAFE_METHODS # Customers can only read
+            return request.method in SAFE_METHODS 
         return False
     def has_object_permission(self, request, view, obj):
         user = request.user
@@ -109,11 +109,11 @@ class ReviewViewSet(viewsets.ModelViewSet):
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
-    permission_classes = [PaymentPermission] # Applied new permission
+    permission_classes = [PaymentPermission]
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
-    permission_classes = [CartPermission] # Applied new permission
+    permission_classes = [CartPermission]
 class UsersViewSet(viewsets.ModelViewSet):
     queryset = Users.objects.all()
     serializer_class = UsersSerializer
@@ -132,20 +132,20 @@ class UsersViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [ProductPermission]  # Apply the custom permission
+    permission_classes = [ProductPermission] 
 
 class DiscountViewSet(viewsets.ModelViewSet):
     queryset = Discount.objects.all()
     serializer_class = DiscountSerializer
-    permission_classes = [DiscountPermission] # Applied new permission
+    permission_classes = [DiscountPermission] 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [OrderPermission] # Applied new permission
+    permission_classes = [OrderPermission] 
 class OrderItemViewSet(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
-    permission_classes = [OrderItemPermission] # Applied new permission
+    permission_classes = [OrderItemPermission] 
 class STKPushView(APIView):
     def post(self, request):
         serializer = STKPushSerializer(data=request.data)
@@ -166,10 +166,6 @@ def daraja_callback(request):
     print("Daraja Callback Data:", request.data)
     return Response({"ResultCode": 0, "ResultDesc": "Accepted"})
     
-# @api_view(['POST'])
-# def daraja_callback(request):
-#     print("Daraja Callback Data:", request.data)
-#     return Response({"ResultCode": 0, "ResultDesc": "Accepted"})
 
 
 
