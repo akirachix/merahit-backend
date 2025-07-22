@@ -29,12 +29,7 @@ from users.permissions import (
     OrderPermission, OrderItemPermission, PaymentPermission, CartPermission
 )
 class DiscountPermission(BasePermission):
-    """
-    Access rules for Discounts:
-    - Admins have full access.
-    - Mamamboga (vendors) can create/update/delete their own discounts.
-    - Customers can only read (GET) discounts.
-    """
+ 
     def has_permission(self, request, view):
         user = request.user
         if not user.is_authenticated:

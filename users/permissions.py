@@ -15,10 +15,6 @@ class IsAdminOrSelf(BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.user.is_staff or obj == request.user
 class ProductPermission(BasePermission):
-    """
-    Allow full access only to mamamboga users and staff,
-    and read-only access to customers.
-    """
     def has_permission(self, request, view):
         user = request.user
         if not user.is_authenticated:
