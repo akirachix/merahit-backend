@@ -15,7 +15,10 @@ class IsAdminOrSelf(BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.user.is_staff or obj == request.user
 class ProductPermission(BasePermission):
-   
+    """
+    Allow full access only to mamamboga users and staff,
+    and read-only access to customers.
+    """
     def has_permission(self, request, view):
         user = request.user
         if not user.is_authenticated:
@@ -23,8 +26,9 @@ class ProductPermission(BasePermission):
         if user.is_staff or user.usertype == 'mamamboga':
             return True
         if user.usertype == 'customer' and request.method in SAFE_METHODS:
-            return True
-        return False
+            return True 
+        return False 
+
     def has_object_permission(self, request, view, obj):
         user = request.user
         if user.is_staff or user.usertype == 'mamamboga':
@@ -32,8 +36,9 @@ class ProductPermission(BasePermission):
         if user.usertype == 'customer' and request.method in SAFE_METHODS:
             return True
         return False
+
+
 class ReviewPermission(BasePermission):
-  
     def has_permission(self, request, view):
         user = request.user
         if not user.is_authenticated:
@@ -43,18 +48,20 @@ class ReviewPermission(BasePermission):
         if user.usertype == 'mamamboga':
             return request.method in SAFE_METHODS
         if user.usertype == 'customer':
-            return True
+            return True 
         return False
+
     def has_object_permission(self, request, view, obj):
         user = request.user
         if user.is_staff:
             return True
         if user.usertype == 'mamamboga':
-            return hasattr(obj, "product") and getattr(obj.product, "vendor_id", None) == user.id and request.method in SAFE_METHODS
-        if user.usertype == 'customer':
-            return hasattr(obj, "customer_id") and obj.customer_id == user.id
-        return False
+            return request.method in SAFE_METHODS and obj.vendor == user
 
+        if user.usertype == 'customer':
+            return obj.customer == user
+            
+        return False
 
 class OrderPermission(BasePermission):
    
@@ -114,3 +121,4 @@ class CartPermission(BasePermission):
         if user.usertype == 'customer':
             return obj.customer_id == user.id
         return False
+

@@ -23,13 +23,11 @@ from .serializers import (
 )
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
-from rest_framework.permissions import AllowAny, BasePermission, SAFE_METHODS # Import BasePermission and SAFE_METHODS for DiscountPermission
-# Import all custom permission classes
+from rest_framework.permissions import AllowAny, BasePermission, SAFE_METHODS 
 from users.permissions import (
     IsVendor, IsCustomer, IsAdminOrSelf, ProductPermission, ReviewPermission,
     OrderPermission, OrderItemPermission, PaymentPermission, CartPermission
 )
-# New DiscountPermission class (add this to your users/permissions.py)
 class DiscountPermission(BasePermission):
     """
     Access rules for Discounts:
@@ -53,8 +51,6 @@ class DiscountPermission(BasePermission):
         if user.is_staff:
             return True
         if user.usertype == 'mamamboga':
-            # Assuming Discount model has a 'vendor' ForeignKey or similar
-            # that links it to the Mamamboga user
             return hasattr(obj, 'vendor') and obj.vendor == user
         if user.usertype == 'customer':
             return request.method in SAFE_METHODS
@@ -136,7 +132,8 @@ class UsersViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [ProductPermission]
+    permission_classes = [ProductPermission]  # Apply the custom permission
+
 class DiscountViewSet(viewsets.ModelViewSet):
     queryset = Discount.objects.all()
     serializer_class = DiscountSerializer

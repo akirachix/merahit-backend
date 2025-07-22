@@ -16,4 +16,3 @@ admin.site.register(Payment)
 from .models import Cart
 admin.site.register(Cart)
 
-# Register your models here.
