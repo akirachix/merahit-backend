@@ -5,7 +5,7 @@ from users.models import Users
 class Product(models.Model):
     vendor = models.ForeignKey(Users, on_delete=models.CASCADE, limit_choices_to={'usertype': 'mamamboga'},related_name='products',) 
     product_name = models.CharField(
-    max_length=50,
+    max_length=200,
     choices=[
         ('tomatoes', 'Tomatoes'),
         ('cucumber', 'Cucumber'),
@@ -40,7 +40,7 @@ class Product(models.Model):
     )
 
     category = models.CharField(
-        max_length=20,
+        max_length=200,
         choices=[
             ('vegetable', 'Vegetable'),
             ('fish', 'Fish'),
@@ -57,7 +57,7 @@ class Product(models.Model):
         ('cup','Cup'),
         ('piece','Piece')
     ])
-    product_image =  models.URLField(max_length=800)
+    product_image =  models.URLField(max_length=1000)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
