@@ -70,11 +70,6 @@ class UsersSerializer(serializers.ModelSerializer):
        ]
 
 
-class OrderSerializer(serializers.ModelSerializer):
-   class Meta:
-       model = Order
-       fields = "__all__"
-
 
 class OrderItemSerializer(serializers.ModelSerializer):
    class Meta:
@@ -107,28 +102,81 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class DiscountSerializer(serializers.ModelSerializer):
-   class Meta:
-       model = Discount 
-       fields = "__all__"
+    vendor = UsersSerializer(read_only=True)
+    product = ProductSerializer(read_only=True)
+
+    vendor_id = serializers.PrimaryKeyRelatedField(
+        queryset=Users.objects.filter(usertype='mamamboga'),
+        source='vendor',
+        write_only=True
+    )
+    product_id = serializers.PrimaryKeyRelatedField(
+        queryset=Product.objects.all(), 
+        source='product',
+        write_only=True
+    )
+
+    class Meta:
+        model = Discount
+        fields = [
+            'id',
+            'old_price',
+            'new_price',
+            'start_date',
+            'end_date',
+            'created_at',
+            'vendor',
+            'product',
+            'vendor_id',
+            'product_id',
+        ]
+        read_only_fields = ['vendor', 'product', 'created_at']
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-
-
-
-   class Meta:
-       model = Review
-       fields = [
-           'id',
-           'vendor',
-           'vendor_id',
-           'customer',
-           'customer_id',
-           'rating',
-           'comment',
-           'created_at',
-       ]
-
+    vendor = UsersSerializer(read_only=True)
+    customer = UsersSerializer(read_only=True)
+    vendor_id = serializers.PrimaryKeyRelatedField(
+        queryset=Users.objects.filter(usertype='mamamboga'),
+        source='vendor',
+        write_only=True
+    )
+    customer_id = serializers.PrimaryKeyRelatedField(
+        queryset=Users.objects.filter(usertype='customer'),
+        source='customer',
+        write_only=True
+    )
+    class Meta:
+        model = Review
+        fields = ['id', 'vendor', 'customer', 'vendor_id', 'customer_id', 'rating', 'comment', 'created_at']
+        read_only_fields = ['vendor', 'customer', 'created_at']
+class OrderSerializer(serializers.ModelSerializer):
+    vendor = UsersSerializer(read_only=True)
+    customer = UsersSerializer(read_only=True)
+    vendor_id = serializers.PrimaryKeyRelatedField(
+        queryset=Users.objects.filter(usertype='mamamboga'),
+        source='vendor',
+        write_only=True
+    )
+    customer_id = serializers.PrimaryKeyRelatedField(
+        queryset=Users.objects.filter(usertype='customer'),
+        source='customer',
+        write_only=True
+    )
+    class Meta:
+        model = Order
+        fields = [
+            'id',
+            'vendor',
+            'customer',
+            'vendor_id',
+            'customer_id',
+            'order_date',
+            'status',
+            'total_amount',
+            'created_at'
+        ]
+        read_only_fields = ['vendor', 'customer', 'created_at']
 
 class STKPushSerializer(serializers.Serializer):
    phone_number = serializers.CharField()
