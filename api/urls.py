@@ -11,24 +11,16 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 
 
-
-
-
-
-
-
-
-
 router = DefaultRouter()
-router.register(r"Order", OrderViewSet, basename="order")
-router.register(r"OrderItem", OrderItemViewSet, basename="orderitem")
-router.register(r"Payment", PaymentViewSet, basename="payment")
-router.register(r"Cart", CartViewSet, basename="cart")
+router.register(r"order", OrderViewSet, basename="order")
+router.register(r"orderItem", OrderItemViewSet, basename="orderitem")
+router.register(r"payment", PaymentViewSet, basename="payment")
+router.register(r"cart", CartViewSet, basename="cart")
 router.register(r"users", UsersViewSet, basename="users")
-router.register(r"Admin", AdminViewSet, basename="Admin")
-router.register(r"Product", ProductViewSet, basename="product")
-router.register(r"Discount", DiscountViewSet, basename="discount")
-router.register(r"Review", ReviewViewSet, basename="feedback")
+router.register(r"admin", AdminViewSet, basename="Admin")
+router.register(r"product", ProductViewSet, basename="product")
+router.register(r"discount", DiscountViewSet, basename="discount")
+router.register(r"review", ReviewViewSet, basename="feedback")
 
 urlpatterns = [
     path("", include(router.urls)),

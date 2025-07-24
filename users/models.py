@@ -7,16 +7,16 @@ class Users(models.Model):
         ('mamamboga', 'Mama Mboga'),
     )
 
-    full_name = models.CharField(max_length=100)
+    full_name = models.CharField(max_length=500)
     phone_number = models.CharField(max_length=15, unique=True)
     password = models.CharField(max_length=8)
     latitude = models.FloatField()
     longitude = models.FloatField()
-    profile_picture = models.URLField(max_length=200)
+    profile_picture = models.URLField(max_length=1000)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     usertype = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default="mamamboga")
-    address = models .CharField(max_length=300, default="Nairobi, Kenya")
+    address = models .CharField(max_length=500, default="Nairobi, Kenya")
 
     class Meta:
         verbose_name = 'User'
