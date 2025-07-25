@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='product',
             name='category',
-            field=models.CharField(choices=[('vegetable', 'Vegetable'), ('fish', 'Fish'), ('cereal', 'Cereal'), ('others', 'Others')], default=('vegetable', 'Vegetable'), max_length=20),
+            field=models.CharField(choices=[('vegetable', 'Vegetable'), ('fish', 'Fish'), ('cereal', 'Cereal'), ('others', 'Others')], default=('vegetable', 'Vegetable'), max_length=200),
             preserve_default=False,
         ),
     ]
