@@ -23,7 +23,6 @@ def reverse_geocode(lat, lon):
        return ""
 
 
-# Haversine for distance
 def haversine_distance(lat1, lon1, lat2, lon2):
    R = 6371.0
    phi1 = math.radians(lat1)

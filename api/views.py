@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from django_filters.rest_framework import DjangoFilterBackend
 from order.models import Order, OrderItem, Payment, Cart
 from inventory.models import Product, Discount
@@ -8,7 +8,9 @@ from reviews.models import Review
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.permissions import AllowAny, BasePermission, SAFE_METHODS
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
 from .daraja import DarajaAPI
 from .serializers import (
     STKPushSerializer,
@@ -21,15 +23,13 @@ from .serializers import (
     CartSerializer,
     ReviewSerializer,
 )
-from django.contrib.auth import authenticate
-from rest_framework.authtoken.models import Token
-from rest_framework.permissions import AllowAny, BasePermission, SAFE_METHODS 
 from users.permissions import (
     IsVendor, IsCustomer, IsAdminOrSelf, ProductPermission, ReviewPermission,
     OrderPermission, OrderItemPermission, PaymentPermission, CartPermission
 )
+
+
 class DiscountPermission(BasePermission):
- 
     def has_permission(self, request, view):
         user = request.user
         if not user.is_authenticated:
@@ -39,8 +39,9 @@ class DiscountPermission(BasePermission):
         if user.usertype == 'mamamboga':
             return True
         if user.usertype == 'customer':
-            return request.method in SAFE_METHODS 
+            return request.method in SAFE_METHODS
         return False
+
     def has_object_permission(self, request, view, obj):
         user = request.user
         if user.is_staff:
@@ -50,8 +51,11 @@ class DiscountPermission(BasePermission):
         if user.usertype == 'customer':
             return request.method in SAFE_METHODS
         return False
+
+
 class Signup(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
         phone = request.data.get('phone_number')
         password = request.data.get('password')
@@ -61,6 +65,7 @@ class Signup(APIView):
         latitude = request.data.get('latitude')
         longitude = request.data.get('longitude')
         profile_picture = request.data.get('profile_picture')
+
         try:
             user = Users(
                 phone_number=phone,
@@ -77,8 +82,11 @@ class Signup(APIView):
             return Response(serialized_user.data, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class Login(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
         phone = request.data.get('phone_number')
         password = request.data.get('password')
@@ -87,60 +95,81 @@ class Login(APIView):
             return Response({'error': 'Invalid phone number or PIN'}, status=status.HTTP_401_UNAUTHORIZED)
         if not Users.objects.filter(pk=user.pk).exists():
             return Response({'error': 'User does not exist in DB.'}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
             token, created = Token.objects.get_or_create(user=user)
         except Exception as exc:
             return Response({'error': f'Token creation failed: {exc}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         return Response({
             'token': token.key,
             'usertype': user.usertype,
             'full_name': user.full_name,
             'phone_number': user.phone_number,
         })
+
+
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [ReviewPermission]
+
+
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
     permission_classes = [PaymentPermission]
+
+
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
     permission_classes = [CartPermission]
+
+
 class UsersViewSet(viewsets.ModelViewSet):
     queryset = Users.objects.all()
     serializer_class = UsersSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['usertype']
     permission_classes = [IsAdminOrSelf]
+
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
         for user_data in response.data:
             user_data.pop('till_number', None)
         return response
+
     def retrieve(self, request, *args, **kwargs):
         response = super().retrieve(request, *args, **kwargs)
         response.data.pop('till_number', None)
         return response
+
+
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [ProductPermission] 
+    permission_classes = [ProductPermission]
+
 
 class DiscountViewSet(viewsets.ModelViewSet):
     queryset = Discount.objects.all()
     serializer_class = DiscountSerializer
-    permission_classes = [DiscountPermission] 
+    permission_classes = [DiscountPermission]
+
+
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [OrderPermission] 
+    permission_classes = [OrderPermission]
+
+
 class OrderItemViewSet(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
-    permission_classes = [OrderItemPermission] 
+    permission_classes = [OrderItemPermission]
+
+
 class STKPushView(APIView):
     def post(self, request):
         serializer = STKPushSerializer(data=request.data)
@@ -156,20 +185,12 @@ class STKPushView(APIView):
             )
             return Response(response)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['POST'])
 def daraja_callback(request):
     print("Daraja Callback Data:", request.data)
-    return Response({"ResultCode": 0, "ResultDesc": "Accepted"})
-    
-
-
-
-
-
-
-
-
-
-
-
-
+    return Response({
+        "ResultCode": 0,
+        "ResultDesc": "Accepted"
+    })

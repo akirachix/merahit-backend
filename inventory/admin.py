@@ -7,4 +7,4 @@ admin.site.register(Discount)
 from .models import LoyalCustomerDiscount
 admin.site.register(LoyalCustomerDiscount)
 
-# Register your models here.
+

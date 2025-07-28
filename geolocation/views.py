@@ -4,7 +4,7 @@ from rest_framework import status
 from .models import GeoLocation
 from .serializers import GeoLocationSerializer
 from .utils import haversine_distance, reverse_geocode
-# Create your views here.
+
 
 class GeoLocationListView(APIView):
    def post(self, request):
