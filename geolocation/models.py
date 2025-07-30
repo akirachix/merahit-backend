@@ -1,7 +1,7 @@
 from django.db import models
 from users.models import Users
 
-# Create your models here.
+
 class GeoLocation(models.Model):
     user = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='geolocations')
     name = models.CharField(max_length=100)
