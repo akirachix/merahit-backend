@@ -57,7 +57,7 @@ class Product(models.Model):
         ('cup','Cup'),
         ('piece','Piece')
     ])
-    product_image =  models.URLField(max_length=50000)
+    product_image =  models.URLField(max_length=1000)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
@@ -87,4 +87,3 @@ class LoyalCustomerDiscount(models.Model):
 
     def __str__(self):
         return f"Loyal Discount for {self.customer.full_name}"
-
