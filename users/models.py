@@ -29,7 +29,8 @@ class Users(AbstractBaseUser, PermissionsMixin):
     USER_TYPE_CHOICES = (
         ('customer', 'Customer'),
         ('mamamboga', 'Mama Mboga'),
-        ('admin', 'Admin'), 
+        ('admin', 'Admin'),
+        ('agent', 'Agent'),
     )
     full_name = models.CharField(max_length=100, default='Unknown User')
     phone_number = models.CharField(max_length=15, unique=True)
@@ -75,3 +76,19 @@ class MamaMboga(Users):
 
     def __str__(self):
         return f"Welcome {self.full_name}"
+
+
+# Note: Agent model would be implemented here if needed
+# class Agent(Users):
+#     agent_id = models.CharField(max_length=50, unique=True, null=True, blank=True)
+#     department = models.CharField(max_length=100, default='General')
+#     hire_date = models.DateField(auto_now_add=True)
+#
+#     def save(self, *args, **kwargs):
+#         self.usertype = 'agent'
+#         if not self.agent_id:
+#             self.agent_id = f"AGT{self.pk or ''}{self.phone_number[-4:]}"
+#         super().save(*args, **kwargs)
+#
+#     def __str__(self):
+#         return f"Agent {self.full_name} ({self.agent_id})"

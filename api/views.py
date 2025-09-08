@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 from order.models import Order, OrderItem, Payment, Cart
 from inventory.models import Product, Discount
@@ -144,6 +145,60 @@ class UsersViewSet(viewsets.ModelViewSet):
         response = super().retrieve(request, *args, **kwargs)
         response.data.pop('till_number', None)
         return response
+
+    @action(detail=False, methods=['get'], url_path='list_agents')
+    def list_agents(self, request):
+        """
+        Custom action to list all agents.
+        This demonstrates that AgentViewSet is not needed - 
+        the same functionality can be achieved here.
+        """
+        agents = Users.objects.filter(usertype='agent')
+        serializer = self.get_serializer(agents, many=True)
+        return Response(serializer.data)
+
+
+# Optional AgentViewSet - Only implement if agents need special functionality
+# beyond what UsersViewSet provides
+# 
+# class AgentViewSet(viewsets.ModelViewSet):
+#     """
+#     ViewSet for managing agents specifically.
+#     
+#     NOTE: This is likely unnecessary since UsersViewSet with filtering
+#     can handle agents: GET /api/users/?usertype=agent
+#     
+#     Only implement this if agents need special functionality
+#     that UsersViewSet doesn't provide.
+#     """
+#     queryset = Agent.objects.all()
+#     serializer_class = AgentSerializer
+#     permission_classes = [IsAdminOrSelf]
+#
+#     @action(detail=False, methods=['get'], url_path='list_agents')
+#     def list_agents(self, request):
+#         """
+#         Custom action to list all agents.
+#         This is redundant since the default list() method does the same thing.
+#         """
+#         agents = Agent.objects.all()
+#         serializer = self.get_serializer(agents, many=True)
+#         return Response(serializer.data)
+#
+#     @action(detail=False, methods=['get'], url_path='agents_by_department')
+#     def agents_by_department(self, request):
+#         """
+#         Example of agent-specific functionality that might justify
+#         having a separate AgentViewSet.
+#         """
+#         department = request.query_params.get('department')
+#         if department:
+#             agents = Agent.objects.filter(department=department)
+#         else:
+#             agents = Agent.objects.all()
+#         
+#         serializer = self.get_serializer(agents, many=True)
+#         return Response(serializer.data)
 
 
 class ProductViewSet(viewsets.ModelViewSet):

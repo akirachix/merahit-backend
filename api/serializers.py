@@ -43,6 +43,28 @@ class UsersSerializer(serializers.ModelSerializer):
         read_only_fields = ['created_at', 'updated_at']
 
 
+# Note: AgentSerializer would be implemented here if Agent model exists
+# class AgentSerializer(serializers.ModelSerializer):
+#     password = serializers.CharField(write_only=True)
+#
+#     def create(self, validated_data):
+#         password = validated_data.pop('password')
+#         agent = Agent(**validated_data)
+#         agent.set_password(password)
+#         agent.save()
+#         return agent
+#
+#     class Meta:
+#         model = Agent
+#         fields = [
+#             'id', 'full_name', 'phone_number', 'password',
+#             'latitude', 'longitude', 'profile_picture', 'usertype',
+#             'address', 'is_active', 'is_staff', 'created_at', 'updated_at',
+#             'agent_id', 'department', 'hire_date',
+#         ]
+#         read_only_fields = ['created_at', 'updated_at', 'usertype', 'hire_date']
+
+
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product

@@ -14,6 +14,8 @@ router.register(r"order-items", OrderItemViewSet, basename="orderitem")
 router.register(r"payments", PaymentViewSet, basename="payment")
 router.register(r"carts", CartViewSet, basename="cart")
 router.register(r"users", UsersViewSet, basename="users")
+# Optional: Only register if you need agent-specific functionality
+# router.register(r"agents", AgentViewSet, basename="agent")
 router.register(r"products", ProductViewSet, basename="product")
 router.register(r"discounts", DiscountViewSet, basename="discount")
 router.register(r"reviews", ReviewViewSet, basename="review")
